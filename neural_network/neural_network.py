@@ -3,22 +3,19 @@
 import pickle
 import os
 import numpy as np
+from random import shuffle
 fil = open('plik.py', 'rb')
 data = pickle.load(fil)
-
+shuffle(data)
 X = np.array([dat[1] for dat in data])
 Y = np.array([dat[2] for dat in data])
 
 # Learn the neural network
-
-import typing as tp
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.model_selection import KFold
 
 def baseline_model() -> Sequential:
     model = Sequential()
@@ -28,7 +25,6 @@ def baseline_model() -> Sequential:
     model.add(Dropout(0.5))
     model.add(Dense(50, kernel_initializer='normal', activation='tanh'))
 
-    opt = keras.optimizers.Adam(learning_rate=0.01)
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
 
@@ -36,6 +32,7 @@ def baseline_model() -> Sequential:
 scaler = StandardScaler()
 scaler.fit(X)
 X = scaler.transform(X)
+kf = KFold(n_splits=10)
 train_index, test_index = next(iter(kf.split(X)))
 X_train, X_test = X[train_index], X[test_index]
 Y_train, Y_test = X[train_index], Y[test_index]
