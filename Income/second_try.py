@@ -32,7 +32,10 @@ with open('KLIENCI.csv', 'r' , newline='') as klienci:
                 user_age = 20 - int(user_birthday)
             else:
                 user_age = 2020 - int('19'+user_birthday)
-            user_sex = row[4]
+            if row[4] == 'M':
+                user_sex = 1
+            else:
+                user_sex = 0
             clients[user_id] = [user_age, user_sex]
 
 
