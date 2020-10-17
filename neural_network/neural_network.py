@@ -2,7 +2,8 @@
 
 import pickle
 import numpy as np
-from random import shuffle
+from random import shuffle, seed
+seed(0) # Standard seed
 fil = open('plik.py', 'rb')
 data = pickle.load(fil)
 shuffle(data)
