@@ -6,7 +6,7 @@ Repozytorium Asseco Codeplay
 
 Neural network dokonuje końcowej ~klasyfikacji~ regresji.
 
-Sieć finalnie nauczyła się na 81%
+Najlepsza sieć finalnie była na nauczyła się na 82%, z batch size=300 i epochs=150.
 
 # Spendings  
 

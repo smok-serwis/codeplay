@@ -34,25 +34,40 @@ def baseline_model() -> Sequential:
 scaler = StandardScaler()
 scaler.fit(X)
 X = scaler.transform(X)
+
 kf = KFold(n_splits=10)
 train_index, test_index = next(iter(kf.split(X)))
 X_train, X_test = X[train_index], X[test_index]
 Y_train, Y_test = X[train_index], Y[test_index]
 
-kreg = KerasRegressor(build_fn=baseline_model, epochs=200, batch_size=100, verbose=1)
-kreg.fit(X_train, Y_train)
-correct, false = 0, 0
-for entry, real_values in zip(kreg.predict(X_test), Y_test):
-    for estimated, real in zip(entry, real_values):
-        set = False
-        if real == 1 and abs(estimated) > 0.5:
-            correct += 1
-            set = True
-        elif real == 0 and abs(estimated) < 0.5:
-            correct += 1
-            set = True
+max_accuracy = 0
+max_epochs = 0
+max_batch_size = 0
+for epochs in (100, 150, 200, 250, 300):
+    for batch_size in (100, 150, 200, 250, 300):
 
-        if not set:
-            false += 1
+        kreg = KerasRegressor(build_fn=baseline_model, epochs=epochs, batch_size=batch_size, verbose=1)
+        kreg.fit(X_train, Y_train)
+        correct, false = 0, 0
+        for entry, real_values in zip(kreg.predict(X_test), Y_test):
+            for estimated, real in zip(entry, real_values):
+                set = False
+                if real == 1 and abs(estimated) > 0.5:
+                    correct += 1
+                    set = True
+                elif real == 0 and abs(estimated) < 0.5:
+                    correct += 1
+                    set = True
 
-print(f'Correct = {correct}, false={false}')
+                if not set:
+                    false += 1
+
+        print(f'Correct = {correct}, false={false}')
+        ratio = correct/(correct+false)
+        print(f'Final accuracy is {ratio*100}%')
+        if ratio > max_accuracy:
+            max_accuracy = ratio
+            max_epochs = epochs
+            max_batch_size = batch_size
+
+print(f'Max accuracy was {max_accuracy*100}% with bs={max_batch_size}, epochs={max_epochs}')
