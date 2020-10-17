@@ -1,7 +1,6 @@
 # Import the data from the pickle
 
 import pickle
-import os
 import numpy as np
 from random import shuffle
 fil = open('plik.py', 'rb')
