@@ -6,6 +6,8 @@ Repozytorium Asseco Codeplay
 
 Neural network dokonuje końcowej ~klasyfikacji~ regresji.
 
+Sieć finalnie nauczyła się na 81%
+
 # Spendings  
 
 Bierze CSV'ki od Asseco i dokonuje kompilacji słownika
@@ -15,5 +17,6 @@ Rok => Użytkownik => Wektor cech pod względem wydatków.
 
 Bierze CSV'ki od Asseco i dokonuje kompilacji słownika
 Rok => Użytkownik => Wektor cech pod względem dochodu.
+
 
  

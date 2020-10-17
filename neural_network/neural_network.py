@@ -39,7 +39,7 @@ train_index, test_index = next(iter(kf.split(X)))
 X_train, X_test = X[train_index], X[test_index]
 Y_train, Y_test = X[train_index], Y[test_index]
 
-kreg = KerasRegressor(build_fn=baseline_model, epochs=100, batch_size=100, verbose=1)
+kreg = KerasRegressor(build_fn=baseline_model, epochs=200, batch_size=100, verbose=1)
 kreg.fit(X_train, Y_train)
 correct, false = 0, 0
 for entry, real_values in zip(kreg.predict(X_test), Y_test):
