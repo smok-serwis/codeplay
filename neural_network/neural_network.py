@@ -1,14 +1,15 @@
 # Import the data from the pickle
 
 import pickle
-import os
 import numpy as np
-from random import shuffle
+from random import shuffle, seed
+seed(0) # Standard seed
 fil = open('plik.py', 'rb')
 data = pickle.load(fil)
 shuffle(data)
 X = np.array([dat[1] for dat in data])
 Y = np.array([dat[2] for dat in data])
+
 
 # Learn the neural network
 from keras.layers import Dense, Dropout
@@ -16,6 +17,7 @@ from keras.models import Sequential
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold
+
 
 def baseline_model() -> Sequential:
     model = Sequential()
