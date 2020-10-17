@@ -10,12 +10,14 @@ shuffle(data)
 X = np.array([dat[1] for dat in data])
 Y = np.array([dat[2] for dat in data])
 
+
 # Learn the neural network
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold
+
 
 def baseline_model() -> Sequential:
     model = Sequential()
