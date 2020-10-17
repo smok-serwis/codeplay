@@ -2,18 +2,20 @@
 
 import pickle
 import os
-print(os.listdir('..'))
+import numpy as np
+from random import shuffle
+fil = open('plik.py', 'rb')
+data = pickle.load(fil)
+shuffle(data)
+X = np.array([dat[1] for dat in data])
+Y = np.array([dat[2] for dat in data])
 
 # Learn the neural network
-
-import typing as tp
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.model_selection import KFold
 
 def baseline_model() -> Sequential:
     model = Sequential()
@@ -23,15 +25,32 @@ def baseline_model() -> Sequential:
     model.add(Dropout(0.5))
     model.add(Dense(50, kernel_initializer='normal', activation='tanh'))
 
-    opt = keras.optimizers.Adam(learning_rate=0.01)
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
 
 
-estimators = []
-estimators.append(('standarize', StandardScaler()))
-estimators.append(
-    ('mlp', KerasRegressor(build_fn=baseline_model, epochs=50, batch_size=100, verbose=1)))
-kfold = KFold(n_splits=10)
-results = cross_val_score(estimator, X, Y, cv=kfold)
-print("Standardized: %.2f (%.2f) MSE" % (results.mean(), results.std()))
+scaler = StandardScaler()
+scaler.fit(X)
+X = scaler.transform(X)
+kf = KFold(n_splits=10)
+train_index, test_index = next(iter(kf.split(X)))
+X_train, X_test = X[train_index], X[test_index]
+Y_train, Y_test = X[train_index], Y[test_index]
+
+kreg = KerasRegressor(build_fn=baseline_model, epochs=100, batch_size=100, verbose=1)
+kreg.fit(X_train, Y_train)
+correct, false = 0, 0
+for entry, real_values in zip(kreg.predict(X_test), Y_test):
+    for estimated, real in zip(entry, real_values):
+        set = False
+        if estimated == 1 and abs(real) > 0.5:
+            correct += 1
+            set = True
+        elif estimated == 0 and abs(real) < 0.5:
+            correct += 1
+            set = True
+
+        if not set:
+            false += 1
+
+print(f'Correct = {correct}, false={false}')
