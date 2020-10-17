@@ -21,14 +21,19 @@ with open('result.csv', newline='') as income:
             else:
                 obj[year][user].append(amount)
 
-with open('KLIENCI.csv', newline='') as klienci:
+with open('KLIENCI.csv', 'r' , newline='') as klienci:
     clients_reader = csv.reader(klienci, delimiter=',')
     next(clients_reader)
     for row in clients_reader:
         user_id = row[0]
-        user_birthday = row[3]
-        user_sex = row[4]
-        clients[user_id] = [user_birthday, user_sex]
+        user_birthday = row[3].split('/')[0]
+        if user_birthday:
+            if int(user_birthday) < 20:
+                user_age = 20 - int(user_birthday)
+            else:
+                user_age = 2020 - int('19'+user_birthday)
+            user_sex = row[4]
+            clients[user_id] = [user_age, user_sex]
 
 
 for year in obj:
@@ -37,3 +42,6 @@ for year in obj:
         if user in clients:
             users_list.append([f'{user}-{year}', sum(obj[year][user]), clients[user][0], clients[user][1]])
 print(users_list)
+
+file = open('dane_od_macka.py', 'wb')
+pickle.dump(users_list, file, -1)
