@@ -4,11 +4,11 @@ import pickle
 import numpy as np
 from random import shuffle, seed
 seed(0) # Standard seed
-fil = open('plik.py', 'rb')
+fil = open('final_data.pickle', 'rb')
 data = pickle.load(fil)
 shuffle(data)
-X = np.array([dat[1] for dat in data])
-Y = np.array([dat[2] for dat in data])
+X = np.array([dat[2] for dat in data])
+Y = np.array([dat[1] for dat in data])
 
 
 # Learn the neural network
@@ -25,7 +25,7 @@ def baseline_model() -> Sequential:
     model.add(Dropout(0.5))
     model.add(Dense(100, kernel_initializer='normal', activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(50, kernel_initializer='normal', activation='tanh'))
+    model.add(Dense(63, kernel_initializer='normal', activation='tanh'))
 
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
