@@ -2,7 +2,12 @@
 
 import pickle
 import os
-print(os.listdir('..'))
+import numpy as np
+fil = open('plik.py', 'rb')
+data = pickle.load(fil)
+
+X = np.array([dat[1] for dat in data])
+Y = np.array([dat[2] for dat in data])
 
 # Learn the neural network
 
@@ -28,10 +33,27 @@ def baseline_model() -> Sequential:
     return model
 
 
-estimators = []
-estimators.append(('standarize', StandardScaler()))
-estimators.append(
-    ('mlp', KerasRegressor(build_fn=baseline_model, epochs=50, batch_size=100, verbose=1)))
-kfold = KFold(n_splits=10)
-results = cross_val_score(estimator, X, Y, cv=kfold)
-print("Standardized: %.2f (%.2f) MSE" % (results.mean(), results.std()))
+scaler = StandardScaler()
+scaler.fit(X)
+X = scaler.transform(X)
+train_index, test_index = next(iter(kf.split(X)))
+X_train, X_test = X[train_index], X[test_index]
+Y_train, Y_test = X[train_index], Y[test_index]
+
+kreg = KerasRegressor(build_fn=baseline_model, epochs=100, batch_size=100, verbose=1)
+kreg.fit(X_train, Y_train)
+correct, false = 0, 0
+for entry, real_values in zip(kreg.predict(X_test), Y_test):
+    for estimated, real in zip(entry, real_values):
+        set = False
+        if estimated == 1 and abs(real) > 0.5:
+            correct += 1
+            set = True
+        elif estimated == 0 and abs(real) < 0.5:
+            correct += 1
+            set = True
+
+        if not set:
+            false += 1
+
+print(f'Correct = {correct}, false={false}')
