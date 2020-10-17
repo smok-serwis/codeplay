@@ -43,31 +43,39 @@ Y_train, Y_test = X[train_index], Y[test_index]
 max_accuracy = 0
 max_epochs = 0
 max_batch_size = 0
-for epochs in (100, 150, 200, 250, 300):
-    for batch_size in (100, 150, 200, 250, 300):
 
-        kreg = KerasRegressor(build_fn=baseline_model, epochs=epochs, batch_size=batch_size, verbose=1)
-        kreg.fit(X_train, Y_train)
-        correct, false = 0, 0
-        for entry, real_values in zip(kreg.predict(X_test), Y_test):
-            for estimated, real in zip(entry, real_values):
-                set = False
-                if real == 1 and abs(estimated) > 0.5:
-                    correct += 1
-                    set = True
-                elif real == 0 and abs(estimated) < 0.5:
-                    correct += 1
-                    set = True
 
-                if not set:
-                    false += 1
+def evaluate_network_for(epochs: int, batch_size: int) -> float:
+    kreg = KerasRegressor(build_fn=baseline_model, epochs=epochs, batch_size=batch_size, verbose=1)
+    kreg.fit(X_train, Y_train)
+    correct, false = 0, 0
+    for entry, real_values in zip(kreg.predict(X_test), Y_test):
+        for estimated, real in zip(entry, real_values):
+            set = False
+            if real == 1 and abs(estimated) > 0.5:
+                correct += 1
+                set = True
+            elif real == 0 and abs(estimated) < 0.5:
+                correct += 1
+                set = True
 
-        print(f'Correct = {correct}, false={false}')
-        ratio = correct/(correct+false)
-        print(f'Final accuracy is {ratio*100}%')
-        if ratio > max_accuracy:
-            max_accuracy = ratio
-            max_epochs = epochs
-            max_batch_size = batch_size
+            if not set:
+                false += 1
 
-print(f'Max accuracy was {max_accuracy*100}% with bs={max_batch_size}, epochs={max_epochs}')
+    return correct/(correct+false)
+
+
+def grid_search():
+    for epochs in (100, 150, 200, 250, 300):
+        for batch_size in (100, 150, 200, 250, 300):
+            acc = evaluate_network_for(epochs, batch_size)
+            if acc > max_accuracy:
+                max_accuracy = acc
+                max_epochs = epochs
+                max_batch_size = batch_size
+
+    print(f'Max accuracy was {max_accuracy*100}% with bs={max_batch_size}, epochs={max_epochs}')
+    return max_batch_size, max_epochs
+
+
+grid_search()
