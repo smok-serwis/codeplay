@@ -45,10 +45,10 @@ correct, false = 0, 0
 for entry, real_values in zip(kreg.predict(X_test), Y_test):
     for estimated, real in zip(entry, real_values):
         set = False
-        if estimated == 1 and abs(real) > 0.5:
+        if real == 1 and abs(estimated) > 0.5:
             correct += 1
             set = True
-        elif estimated == 0 and abs(real) < 0.5:
+        elif real == 0 and abs(estimated) < 0.5:
             correct += 1
             set = True
 
