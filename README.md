@@ -36,6 +36,9 @@ Dokonuje właściwej analizy kategorycznej za pomocą perceptrona wielowarstwowe
 Zastosowano tutaj prosty perceptron wielowarstwowy. Wejście miało wymiar 63, a wyjście 19 klas.
 Zastosowano architekturę 63 - 100 - 100 - 19 z funkcją aktywacji ReLU i regularyzacją Dropout=0.5.
 
+Ustalono że dokładanie kolejnych warstw lub zwiększanie liczby neuronów w warstwach nie poprawia
+dokładności sieci.
+
 ## Preprocessing danych
 
 Na samym początku dane poddano standaryzacji.
