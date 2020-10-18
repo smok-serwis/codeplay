@@ -53,5 +53,5 @@ W wyniku pobieżnego [grid search](neural_network/neural_network_grid_search.py)
 optymalne hiperparametry. Był to batch size=150 i liczba epok=80 przy dokładności 72%.
 
 Następnie przeprowadzono [10-krotną walidację skrośną](neural_network/neural_network_10-fold_cv.py).
-W wyniku jej otrzymano średnią dokładność 62%, maksymalną 71% i minimalną 56%.   
+W wyniku jej otrzymano średnią dokładność 62%, maksymalną 72% i minimalną 56%.   
 
