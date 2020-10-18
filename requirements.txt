@@ -1,0 +1,7 @@
+satella
+numpy
+pandas
+keras
+tensorflow
+scipy
+scikit-learn
