@@ -4,13 +4,9 @@ codeplay
 To repozytorium oddaje naszą pracę na Asseco Codeplay 2020. Film z prezentacją
 można zobaczyć [tu](http://mail.dms-serwis.com.pl/asseco-codeplay.mp4).
 
-Projekt jest napisany w języku Python.
+Projekt jest napisany w języku Python 3, wymaga instalacji szeregu [bibliotek](requirements.txt).
 
 # Struktura projektu
-
-## [requirements.txt](requirements.txt)
-
-Wymagania Pythonowe niezbędne do uruchomienia projektu.
 
 ## [Spendings](spendings/)  
 
