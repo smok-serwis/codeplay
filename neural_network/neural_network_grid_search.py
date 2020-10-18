@@ -11,7 +11,7 @@ X = np.array([dat[2] for dat in data])
 Y = np.array([dat[1] for dat in data])
 
 
-# Learn the neural network
+# Train the neural network
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.wrappers.scikit_learn import KerasRegressor
@@ -21,11 +21,11 @@ from sklearn.model_selection import KFold
 
 def baseline_model() -> Sequential:
     model = Sequential()
-    model.add(Dense(200, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(100, kernel_initializer='normal', activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(100, kernel_initializer='normal', activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(63, kernel_initializer='normal', activation='tanh'))
+    model.add(Dense(63, kernel_initializer='normal', activation='relu'))
 
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
@@ -64,8 +64,9 @@ def evaluate_network_for(epochs: int, batch_size: int) -> float:
 
     return correct/(correct+false)
 
-
+# Perform a grid search for the best hyperparameters
 def grid_search():
+    max_accuracy = 0
     for epochs in (100, 150, 200, 250, 300):
         for batch_size in (100, 150, 200, 250, 300):
             acc = evaluate_network_for(epochs, batch_size)
